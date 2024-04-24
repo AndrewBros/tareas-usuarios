@@ -12,6 +12,7 @@ let users = [
     {id: 2, email:"user2@", password:"user2"}
 ]
 
+// Envío de datos directo
 app.get("/tasks/:id", (req,res) => {
     let id = req.params.id
     let task = tasks.find( (t) => t.id == id);
@@ -31,7 +32,28 @@ app.get("/users/:id", (req,res) => {
     }
     res.send(user)
 })
+// Envío de datos como query
+app.get("/users", (req,res) => {
+    let email = req.query.email;
+    if (email != undefined){
+        let userwithEmail = users.filter( user => user.email == email);
+        res.send(userwithEmail)
+        return
+    }
+    res.send(users)
+})
 
+app.get("/tasks", (req,res) => {
+    let text = req.query.text;
+    if (text != undefined){
+        let taskwithText = tasks.filter( task => task.text.indexOf(text) != -1 );
+        res.send(taskwithText)
+        return
+    }
+    res.send(tasks)
+})
+
+// Activación del servidor
 app.listen(8081, () => {
     console.log("Servidor activo en 8081");
 })
